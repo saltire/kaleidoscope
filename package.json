@@ -1,0 +1,19 @@
+{
+  "name": "kaleidoscope",
+  "version": "0.0.0",
+  "description": "A work in progress.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saltire/kaleidoscope.git"
+  },
+  "license": "ISC",
+  "homepage": "https://github.com/saltire/kaleidoscope#readme",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.13.2",
+    "babel-preset-react": "^6.11.1",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-connect": "^5.0.0",
+    "react": "^15.3.0"
+  }
+}

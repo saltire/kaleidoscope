@@ -14,7 +14,7 @@ var margin = .25 * Math.PI / 180;
 var sliceCanvas = document.createElement('canvas');
 sliceCanvas.width = canvas.width;
 sliceCanvas.height = canvas.height;
-sliceCtx = sliceCanvas.getContext('2d');
+var sliceCtx = sliceCanvas.getContext('2d');
 sliceCtx.translate(centerX, centerY);
 sliceCtx.beginPath();
 sliceCtx.moveTo(0, 0);
