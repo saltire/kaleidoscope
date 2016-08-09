@@ -1,62 +1,68 @@
-const points = 5;
-const rotateTime = 3000;
+const Kaleidoscope = function (canvasId, imagePath, points, rotateTime) {
+    this.points = points;
+    this.rotateTime = rotateTime;
 
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-const centerX = canvas.width / 2;
-const centerY = canvas.height / 2;
-ctx.translate(centerX, centerY);
+    this.lastTs = 0;
 
-const radius = Math.min(centerX, centerY);
-const startAngle = 1.5 * Math.PI;
-const arcLength = Math.PI / points;
-const margin = .25 * Math.PI / 180;
+    const canvas = document.getElementById(canvasId);
+    this.ctx = canvas.getContext('2d');
+    this.centerX = canvas.width / 2;
+    this.centerY = canvas.height / 2;
+    this.ctx.translate(this.centerX, this.centerY);
 
-const sliceCanvas = document.createElement('canvas');
-sliceCanvas.width = canvas.width;
-sliceCanvas.height = canvas.height;
-const sliceCtx = sliceCanvas.getContext('2d');
-sliceCtx.translate(centerX, centerY);
-sliceCtx.beginPath();
-sliceCtx.moveTo(0, 0);
-sliceCtx.arc(0, 0, radius, startAngle - arcLength / 2 - margin, startAngle + arcLength / 2 + margin, false);
-sliceCtx.lineTo(0, 0);
-sliceCtx.clip();
+    const radius = Math.min(this.centerX, this.centerY);
+    const startAngle = 1.5 * Math.PI;
+    this.arcLength = Math.PI / this.points;
+    const margin = .25 * Math.PI / 180;
 
-const imageCanvas = document.createElement('canvas');
+    this.sliceCanvas = document.createElement('canvas');
+    this.sliceCanvas.width = canvas.width;
+    this.sliceCanvas.height = canvas.height;
+    this.sliceCtx = this.sliceCanvas.getContext('2d');
+    this.sliceCtx.translate(this.centerX, this.centerY);
+    this.sliceCtx.beginPath();
+    this.sliceCtx.moveTo(0, 0);
+    this.sliceCtx.arc(0, 0, radius, startAngle - this.arcLength / 2 - margin,
+        startAngle + this.arcLength / 2 + margin, false);
+    this.sliceCtx.lineTo(0, 0);
+    this.sliceCtx.clip();
 
-let lastTs = 0;
-function drawFrame(ts) {
-    const delta = ts - lastTs;
-    lastTs = ts;
+    this.imageCanvas = document.createElement('canvas');
+    this.imageCtx = this.imageCanvas.getContext('2d');
 
-    const rotatePercent = delta / rotateTime;
-    sliceCtx.rotate(rotatePercent * 2 * Math.PI);
-    sliceCtx.drawImage(imageCanvas, -centerX, -centerY);
+    const image = new Image();
+    image.src = imagePath;
+    image.onload = () => {
+        this.imageCanvas.width = image.width;
+        this.imageCanvas.height = image.height;
+        this.imageCtx.drawImage(image, 0, 0);
 
-    for (let i = 0; i < points; i++) {
-        ctx.drawImage(sliceCanvas, -centerX, -centerY);
-        ctx.rotate(arcLength * 2);
-    }
-    ctx.scale(-1, 1);
-    ctx.rotate(arcLength);
-    for (let i = 0; i < points; i++) {
-        ctx.drawImage(sliceCanvas, -centerX, -centerY);
-        ctx.rotate(arcLength * 2);
-    }
-    ctx.scale(-1, 1);
-    ctx.rotate(arcLength);
-
-    window.requestAnimationFrame(drawFrame);
-}
-
-const image = new Image();
-image.src = './rainbow.png';
-image.onload = function () {
-    imageCanvas.width = image.width;
-    imageCanvas.height = image.height;
-    const imageCtx = imageCanvas.getContext('2d');
-    imageCtx.drawImage(image, 0, 0);
-
-    window.requestAnimationFrame(drawFrame);
+        window.requestAnimationFrame(this.drawFrame.bind(this));
+    };
 };
+
+Kaleidoscope.prototype.drawFrame = function (ts) {
+    const delta = ts - this.lastTs;
+    this.lastTs = ts;
+
+    const rotatePercent = delta / this.rotateTime;
+    this.sliceCtx.rotate(rotatePercent * 2 * Math.PI);
+    this.sliceCtx.drawImage(this.imageCanvas, -this.centerX, -this.centerY);
+
+    for (let i = 0; i < this.points; i++) {
+        this.ctx.drawImage(this.sliceCanvas, -this.centerX, -this.centerY);
+        this.ctx.rotate(this.arcLength * 2);
+    }
+    this.ctx.scale(-1, 1);
+    this.ctx.rotate(this.arcLength);
+    for (let i = 0; i < this.points; i++) {
+        this.ctx.drawImage(this.sliceCanvas, -this.centerX, -this.centerY);
+        this.ctx.rotate(this.arcLength * 2);
+    }
+    this.ctx.scale(-1, 1);
+    this.ctx.rotate(this.arcLength);
+
+    window.requestAnimationFrame(this.drawFrame.bind(this));
+};
+
+const kaleidoscope = new Kaleidoscope('canvas', './rainbow.png', 3, 3000);
