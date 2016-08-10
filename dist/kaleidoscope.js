@@ -7,8 +7,9 @@ var Kaleidoscope = function Kaleidoscope(canvasId, imagePath, points, rotateTime
     this.ctx = this.canvas.getContext('2d');
     this.centerX = this.canvas.width / 2;
     this.centerY = this.canvas.height / 2;
-    this.radius = Math.min(this.centerX, this.centerY);
     this.ctx.translate(this.centerX, this.centerY);
+    this.size = Math.min(this.canvas.width, this.canvas.height);
+    this.radius = this.size / 2;
 
     this.setPoints(points);
     this.rotateTime = rotateTime;
@@ -37,10 +38,10 @@ Kaleidoscope.prototype.setPoints = function (points) {
     var margin = .25 * Math.PI / 180;
 
     this.sliceCanvas = document.createElement('canvas');
-    this.sliceCanvas.width = this.canvas.width;
-    this.sliceCanvas.height = this.canvas.height;
+    this.sliceCanvas.width = this.size;
+    this.sliceCanvas.height = this.size;
     this.sliceCtx = this.sliceCanvas.getContext('2d');
-    this.sliceCtx.translate(this.centerX, this.centerY);
+    this.sliceCtx.translate(this.radius, this.radius);
     this.sliceCtx.beginPath();
     this.sliceCtx.moveTo(0, 0);
     this.sliceCtx.arc(0, 0, this.radius, startAngle - this.arcLength / 2 - margin, startAngle + this.arcLength / 2 + margin, false);
@@ -54,17 +55,17 @@ Kaleidoscope.prototype.drawFrame = function (ts) {
     this.rotatePercent += delta / this.rotateTime;
 
     this.sliceCtx.rotate(this.rotatePercent * 2 * Math.PI);
-    this.sliceCtx.drawImage(this.imageCanvas, -this.centerX, -this.centerY);
+    this.sliceCtx.drawImage(this.imageCanvas, -this.radius, -this.radius);
     this.sliceCtx.rotate(-this.rotatePercent * 2 * Math.PI);
 
     for (var i = 0; i < this.points; i++) {
-        this.ctx.drawImage(this.sliceCanvas, -this.centerX, -this.centerY);
+        this.ctx.drawImage(this.sliceCanvas, -this.radius, -this.radius);
         this.ctx.rotate(this.arcLength * 2);
     }
     this.ctx.scale(-1, 1);
     this.ctx.rotate(this.arcLength);
     for (var _i = 0; _i < this.points; _i++) {
-        this.ctx.drawImage(this.sliceCanvas, -this.centerX, -this.centerY);
+        this.ctx.drawImage(this.sliceCanvas, -this.radius, -this.radius);
         this.ctx.rotate(this.arcLength * 2);
     }
     this.ctx.scale(-1, 1);
