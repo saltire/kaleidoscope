@@ -7,6 +7,7 @@ var Kaleidoscope = function Kaleidoscope(canvasId, imagePath, points, rotateTime
     this.ctx = this.canvas.getContext('2d');
     this.centerX = this.canvas.width / 2;
     this.centerY = this.canvas.height / 2;
+    this.radius = Math.min(this.centerX, this.centerY);
     this.ctx.translate(this.centerX, this.centerY);
 
     this.setPoints(points);
@@ -31,7 +32,6 @@ var Kaleidoscope = function Kaleidoscope(canvasId, imagePath, points, rotateTime
 Kaleidoscope.prototype.setPoints = function (points) {
     this.points = points;
 
-    var radius = Math.min(this.centerX, this.centerY);
     var startAngle = 1.5 * Math.PI;
     this.arcLength = Math.PI / this.points;
     var margin = .25 * Math.PI / 180;
@@ -43,7 +43,7 @@ Kaleidoscope.prototype.setPoints = function (points) {
     this.sliceCtx.translate(this.centerX, this.centerY);
     this.sliceCtx.beginPath();
     this.sliceCtx.moveTo(0, 0);
-    this.sliceCtx.arc(0, 0, radius, startAngle - this.arcLength / 2 - margin, startAngle + this.arcLength / 2 + margin, false);
+    this.sliceCtx.arc(0, 0, this.radius, startAngle - this.arcLength / 2 - margin, startAngle + this.arcLength / 2 + margin, false);
     this.sliceCtx.lineTo(0, 0);
     this.sliceCtx.clip();
 };
@@ -69,6 +69,12 @@ Kaleidoscope.prototype.drawFrame = function (ts) {
     }
     this.ctx.scale(-1, 1);
     this.ctx.rotate(this.arcLength);
+
+    this.ctx.beginPath();
+    this.ctx.strokeStyle = '#fff';
+    this.ctx.lineWidth = 2;
+    this.ctx.arc(0, 0, this.radius, 0, 2 * Math.PI);
+    this.ctx.stroke();
 
     window.requestAnimationFrame(this.drawFrame.bind(this));
 };
