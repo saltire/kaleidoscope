@@ -16,20 +16,30 @@ const Kaleidoscope = function (canvasId, imagePath, points, rotateTime) {
     this.lastTs = 0;
     this.rotatePercent = 0;
 
-    // Set up image canvas.
+    // Set up image canvas and draw initial image.
     this.imageCanvas = document.createElement('canvas');
     this.imageCtx = this.imageCanvas.getContext('2d');
+    this.setImage(imagePath, () => {
+        // Request the first animation frame.
+        window.requestAnimationFrame(this.drawFrame.bind(this));
+    });
+};
 
-    // Load image and draw it onto image canvas.
+Kaleidoscope.prototype.setImage = function (imagePath, callback) {
+    // Load the image.
     const image = new Image();
     image.src = imagePath;
     image.onload = () => {
-        this.imageCanvas.width = image.width;
-        this.imageCanvas.height = image.height;
+        // Resize the canvas to reset it, then scale to fit the image, and draw the image.
+        this.imageCanvas.width = this.size;
+        this.imageCanvas.height = this.size;
+        this.imageCtx.scale(this.size / image.width, this.size / image.height);
         this.imageCtx.drawImage(image, 0, 0);
 
-        // Request the first animation frame.
-        window.requestAnimationFrame(this.drawFrame.bind(this));
+        // Execute callback if necessary.
+        if (typeof callback === 'function') {
+            callback();
+        }
     };
 };
 

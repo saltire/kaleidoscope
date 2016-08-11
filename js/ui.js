@@ -7,6 +7,14 @@ const ControlForm = React.createClass({
         };
     },
 
+    updateImage(event) {
+        this.setState({
+            image: event.target.value
+        });
+
+        this.kaleidoscope.setImage(event.target.value);
+    },
+
     updatePoints(event) {
         this.setState({
             points: event.target.value
@@ -29,13 +37,21 @@ const ControlForm = React.createClass({
                 <canvas id='canvas' width={this.props.canvasSize} height={this.props.canvasSize} />
                 <form>
                     <div>
+                        <input id='rainbow' type='checkbox' value='./rainbow.png' checked={this.state.image === './rainbow.png'} onChange={this.updateImage} />
+                        <label htmlFor='rainbow'>Rainbow</label>
+                    </div>
+                    <div>
+                        <input id='spiral' type='checkbox' value='./spiral.png' checked={this.state.image === './spiral.png'} onChange={this.updateImage} />
+                        <label htmlFor='spiral'>Spiral</label>
+                    </div>
+                    <div>
                         <label htmlFor='points'>Points</label>
-                        <input type='range' min='1' max='20' id='points' value={this.state.points} onChange={this.updatePoints} />
+                        <input id='points' type='range' min='1' max='20' value={this.state.points} onChange={this.updatePoints} />
                         <span>{this.state.points}</span>
                     </div>
                     <div>
                         <label htmlFor='rotateTime'>Rotate time</label>
-                        <input type='range' min='100' max='5000' id='rotateTime' value={this.state.rotateTime} onChange={this.updateTime} />
+                        <input id='rotateTime' type='range' min='100' max='5000' value={this.state.rotateTime} onChange={this.updateTime} />
                         <span>{this.state.rotateTime}</span>
                     </div>
                 </form>
