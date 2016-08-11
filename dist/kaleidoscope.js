@@ -50,25 +50,40 @@ Kaleidoscope.prototype.setImage = function (imagePath, callback) {
 };
 
 Kaleidoscope.prototype.setPoints = function (points) {
-    // Set up slice canvas.
+    // Set slice variables.
+    this.points = points;
+    this.arcLength = Math.PI / Math.max(1, this.points);
+    var startAngle = 1.5 * Math.PI;
+    var margin = this.arcLength / 2;
+
+    // Set up a slice canvas.
     this.sliceCanvas = document.createElement('canvas');
     this.sliceCanvas.width = this.size;
     this.sliceCanvas.height = this.size;
     this.sliceCtx = this.sliceCanvas.getContext('2d');
     this.sliceCtx.translate(this.radius, this.radius);
 
-    // Set slice variables.
-    this.points = points;
-    this.arcLength = Math.PI / this.points;
-    var startAngle = 1.5 * Math.PI;
-    var margin = .25 * Math.PI / 180;
+    // Set up a mirrored slice canvas.
+    this.mirrorSliceCanvas = document.createElement('canvas');
+    this.mirrorSliceCanvas.width = this.size;
+    this.mirrorSliceCanvas.height = this.size;
+    this.mirrorSliceCtx = this.mirrorSliceCanvas.getContext('2d');
+    this.mirrorSliceCtx.translate(this.radius, this.radius);
+    this.mirrorSliceCtx.scale(-1, 1);
 
-    // Create slice clipping mask.
+    // Create slice clipping mask. This one has a margin to avoid visible gaps between slices.
     this.sliceCtx.beginPath();
     this.sliceCtx.moveTo(0, 0);
-    this.sliceCtx.arc(0, 0, this.radius, startAngle - this.arcLength / 2 - margin, startAngle + this.arcLength / 2 + margin, false);
+    this.sliceCtx.arc(0, 0, this.radius, startAngle - margin, startAngle + this.arcLength + margin, false);
     this.sliceCtx.lineTo(0, 0);
     this.sliceCtx.clip();
+
+    // Create mirrored slice clipping mask.
+    this.mirrorSliceCtx.beginPath();
+    this.mirrorSliceCtx.moveTo(0, 0);
+    this.mirrorSliceCtx.arc(0, 0, this.radius, startAngle, startAngle + this.arcLength, false);
+    this.mirrorSliceCtx.lineTo(0, 0);
+    this.mirrorSliceCtx.clip();
 };
 
 Kaleidoscope.prototype.drawFrame = function (ts) {
@@ -77,26 +92,25 @@ Kaleidoscope.prototype.drawFrame = function (ts) {
     this.lastTs = ts;
     this.rotatePercent += delta / this.rotateTime;
 
-    // Rotate the image and draw it onto the slice canvas.
+    // Rotate the image and draw it onto the slice canvases.
     this.sliceCtx.rotate(this.rotatePercent * 2 * Math.PI);
     this.sliceCtx.drawImage(this.imageCanvas, -this.radius, -this.radius);
     this.sliceCtx.rotate(-this.rotatePercent * 2 * Math.PI);
+    this.mirrorSliceCtx.rotate(this.rotatePercent * 2 * Math.PI);
+    this.mirrorSliceCtx.drawImage(this.imageCanvas, -this.radius, -this.radius);
+    this.mirrorSliceCtx.rotate(-this.rotatePercent * 2 * Math.PI);
 
-    // Draw non-mirrored slices.
-    for (var i = 0; i < this.points; i++) {
+    // Draw non-mirrored slices at least once.
+    for (var i = 0; i < Math.max(1, this.points); i++) {
         this.ctx.drawImage(this.sliceCanvas, -this.radius, -this.radius);
         this.ctx.rotate(this.arcLength * 2);
     }
 
     // Draw mirrored slices.
-    this.ctx.scale(-1, 1);
-    this.ctx.rotate(this.arcLength);
     for (var _i = 0; _i < this.points; _i++) {
-        this.ctx.drawImage(this.sliceCanvas, -this.radius, -this.radius);
-        this.ctx.rotate(this.arcLength * 2);
+        this.ctx.drawImage(this.mirrorSliceCanvas, -this.radius, -this.radius);
+        this.ctx.rotate(-this.arcLength * 2);
     }
-    this.ctx.scale(-1, 1);
-    this.ctx.rotate(this.arcLength);
 
     // Draw a border around the kaleidoscope to cover pixel artifacts.
     this.ctx.beginPath();

@@ -66,7 +66,7 @@ var ControlForm = React.createClass({
                         { htmlFor: 'points' },
                         'Points'
                     ),
-                    React.createElement('input', { id: 'points', type: 'range', min: '1', max: '20', value: this.state.points, onChange: this.updatePoints }),
+                    React.createElement('input', { id: 'points', type: 'range', min: '0', max: '20', value: this.state.points, onChange: this.updatePoints }),
                     React.createElement(
                         'span',
                         null,

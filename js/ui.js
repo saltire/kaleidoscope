@@ -46,7 +46,7 @@ const ControlForm = React.createClass({
                     </div>
                     <div>
                         <label htmlFor='points'>Points</label>
-                        <input id='points' type='range' min='1' max='20' value={this.state.points} onChange={this.updatePoints} />
+                        <input id='points' type='range' min='0' max='20' value={this.state.points} onChange={this.updatePoints} />
                         <span>{this.state.points}</span>
                     </div>
                     <div>
