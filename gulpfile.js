@@ -3,6 +3,7 @@
 const gulp = require('gulp');
 const babel = require('gulp-babel');
 const connect = require('gulp-connect');
+const run = require('gulp-run');
 
 
 gulp.task('babel', () => {
@@ -38,5 +39,10 @@ gulp.task('watch', () => {
     gulp.watch('static/*', ['static']);
 });
 
+gulp.task('gh-pages', () => {
+    run('git subtree push --prefix dist origin gh-pages').exec();
+});
+
 gulp.task('build', ['babel', 'libs', 'static']);
+gulp.task('publish', ['build', 'gh-pages']);
 gulp.task('default', ['build', 'serve', 'watch']);
