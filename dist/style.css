@@ -16,13 +16,33 @@ canvas {
     margin: auto;
 }
 
-form {
+.form-container {
     position: absolute;
     bottom: 0;
     width: 100%;
-    padding: 20px;
     background: rgba(255, 255, 255, .5);
     color: #fff;
+    transform: translateY(0);
+    transition: transform .5s ease-in-out;
+}
+
+.form-container.formHidden {
+    transform: translateY(100%);
+}
+
+.form-container .show-hide {
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    padding: 3px 30px;
+    border-top-left-radius: 5px;
+    background: inherit;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+form {
+    padding: 20px;
 }
 
 .form-control,

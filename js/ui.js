@@ -5,11 +5,18 @@ const ControlForm = React.createClass({
         return {
             canvasWidth: root.offsetWidth,
             canvasHeight: root.offsetHeight,
+            formHidden: false,
             fullscreen: this.props.fullscreen === 'true',
             image: this.props.initialImage,
             points: this.props.initialPoints,
             rotateTime: this.props.initialTime
         };
+    },
+
+    toggleForm() {
+        this.setState({
+            formHidden: !this.state.formHidden
+        });
     },
 
     updateSize(event) {
@@ -57,47 +64,52 @@ const ControlForm = React.createClass({
         return (
             <div>
                 <canvas id='canvas' width={this.state.canvasWidth} height={this.state.canvasHeight} />
-                <form className='form-horizontal'>
-                    <div className='form-group'>
-                        <label className='col-sm-2 control-label'>Fullscreen</label>
-                        <div className='col-sm-10'>
-                            <p className='form-control-static'>
-                                <input id='fullscreen' type='checkbox' checked={this.state.fullscreen} onChange={this.updateFullscreen} />
-                            </p>
-                        </div>
+                <div className={'form-container' + (this.state.formHidden ? ' formHidden' : '')}>
+                    <div className='show-hide' onClick={this.toggleForm}>
+                        {this.state.formHidden ? '▲' : '▼'}
                     </div>
-                    <div className='form-group'>
-                        <label className='col-sm-2 control-label'>Image</label>
-                        <div className='col-sm-10'>
-                            <label className='checkbox-inline'>
-                                <input id='rainbow' type='checkbox' value='./rainbow.png' checked={this.state.image === './rainbow.png'} onChange={this.updateImage} />
-                                Rainbow
-                            </label>
-                            <label className='checkbox-inline'>
-                                <input id='spiral' type='checkbox' value='./spiral.png' checked={this.state.image === './spiral.png'} onChange={this.updateImage} />
-                                Spiral
-                            </label>
+                    <form className='form-horizontal container'>
+                        <div className='form-group'>
+                            <div className='col-sm-offset-2 col-sm-10'>
+                                <label className='checkbox-inline'>
+                                    <input id='fullscreen' type='checkbox' checked={this.state.fullscreen} onChange={this.updateFullscreen} />
+                                    Fullscreen
+                                </label>
+                            </div>
                         </div>
-                    </div>
-                    <div className='form-group'>
-                        <label className='col-sm-2 control-label' htmlFor='points'>Points</label>
-                        <div className='col-sm-8'>
-                            <input className='form-control' id='points' type='range' min='0' max='20' value={this.state.points} onChange={this.updatePoints} />
+                        <div className='form-group'>
+                            <label className='col-sm-2 control-label'>Image</label>
+                            <div className='col-sm-10'>
+                                <label className='checkbox-inline'>
+                                    <input id='rainbow' type='checkbox' value='./rainbow.png' checked={this.state.image === './rainbow.png'} onChange={this.updateImage} />
+                                    Rainbow
+                                </label>
+                                <label className='checkbox-inline'>
+                                    <input id='spiral' type='checkbox' value='./spiral.png' checked={this.state.image === './spiral.png'} onChange={this.updateImage} />
+                                    Spiral
+                                </label>
+                            </div>
                         </div>
-                        <div className='col-sm-2'>
-                            <p className='form-control-static'>{this.state.points}</p>
+                        <div className='form-group'>
+                            <label className='col-sm-2 control-label' htmlFor='points'>Points</label>
+                            <div className='col-sm-8'>
+                                <input className='form-control' id='points' type='range' min='0' max='20' value={this.state.points} onChange={this.updatePoints} />
+                            </div>
+                            <div className='col-sm-2'>
+                                <p className='form-control-static'>{this.state.points}</p>
+                            </div>
                         </div>
-                    </div>
-                    <div className='form-group'>
-                        <label className='col-sm-2 control-label' htmlFor='rotateTime'>Rotate time</label>
-                        <div className='col-sm-8'>
-                            <input className='form-control' id='rotateTime' type='range' min='100' max='5000' value={this.state.rotateTime} onChange={this.updateTime} />
+                        <div className='form-group'>
+                            <label className='col-sm-2 control-label' htmlFor='rotateTime'>Rotate time</label>
+                            <div className='col-sm-8'>
+                                <input className='form-control' id='rotateTime' type='range' min='100' max='5000' value={this.state.rotateTime} onChange={this.updateTime} />
+                            </div>
+                            <div className='col-sm-2'>
+                                <p className='form-control-static'>{this.state.rotateTime}</p>
+                            </div>
                         </div>
-                        <div className='col-sm-2'>
-                            <p className='form-control-static'>{this.state.rotateTime}</p>
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         );
     },
