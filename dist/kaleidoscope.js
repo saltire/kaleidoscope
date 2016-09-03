@@ -1,45 +1,51 @@
 'use strict';
 
-var Kaleidoscope = function Kaleidoscope(canvasId, imagePath, points, rotateTime) {
+var Kaleidoscope = function Kaleidoscope(canvasId, imagePath, fullscreen, points, rotateTime) {
     // Set up main canvas.
     this.canvas = document.getElementById(canvasId);
     this.ctx = this.canvas.getContext('2d');
 
+    // Set up image canvas.
+    this.imageCanvas = document.createElement('canvas');
+    this.imageCtx = this.imageCanvas.getContext('2d');
+
     // Initialize variables.
     this.imagePath = imagePath;
+    this.fullscreen = fullscreen;
     this.points = points;
     this.rotateTime = rotateTime;
     this.lastTs = 0;
     this.rotatePercent = 0;
-    this.imageLoaded = false;
+    this.animStarted = false;
 
     // Set up variables according to canvas size.
     this.setupCanvas();
 };
 
-Kaleidoscope.prototype.setupCanvas = function () {
+Kaleidoscope.prototype.setupCanvas = function (fullscreen) {
     var _this = this;
+
+    if (fullscreen !== undefined) {
+        this.fullscreen = fullscreen;
+    }
 
     this.centerX = this.canvas.width / 2;
     this.centerY = this.canvas.height / 2;
-    this.ctx.translate(this.centerX, this.centerY);
+    this.ctx.setTransform(1, 0, 0, 1, this.centerX, this.centerY);
 
-    // Fit to canvas.
-    // this.size = Math.min(this.canvas.width, this.canvas.height);
-    // Fill canvas.
-    this.size = Math.sqrt(Math.pow(this.canvas.width, 2) + Math.pow(this.canvas.height, 2));
-
+    this.size = this.fullscreen ? Math.sqrt(Math.pow(this.canvas.width, 2) + Math.pow(this.canvas.height, 2)) : Math.min(this.canvas.width, this.canvas.height);
     this.radius = this.size / 2;
 
-    // Set up slice canvas.
-    this.setPoints();
+    // Clear canvas.
+    this.ctx.clearRect(-this.centerX, -this.centerY, this.canvas.width, this.canvas.height);
 
-    // Set up image canvas and draw initial image.
-    this.imageCanvas = document.createElement('canvas');
-    this.imageCtx = this.imageCanvas.getContext('2d');
+    // Set up slice canvas.
+    this.setPoints(this.points);
+
+    // Draw image on image canvas.
     this.setImage(this.imagePath, function () {
-        if (!_this.imageLoaded) {
-            _this.imageLoaded = true;
+        if (!_this.animStarted) {
+            _this.animStarted = true;
             // Request the first animation frame.
             window.requestAnimationFrame(_this.drawFrame.bind(_this));
         }
@@ -58,7 +64,7 @@ Kaleidoscope.prototype.setImage = function (imagePath, callback) {
         // Resize the canvas to reset it, then scale to fit the image, and draw the image.
         _this2.imageCanvas.width = _this2.size;
         _this2.imageCanvas.height = _this2.size;
-        _this2.imageCtx.scale(_this2.size / image.width, _this2.size / image.height);
+        _this2.imageCtx.setTransform(_this2.size / image.width, 0, 0, _this2.size / image.height, 0, 0);
         _this2.imageCtx.drawImage(image, 0, 0);
 
         // Execute callback if necessary.
@@ -69,6 +75,8 @@ Kaleidoscope.prototype.setImage = function (imagePath, callback) {
 };
 
 Kaleidoscope.prototype.setPoints = function (points) {
+    this.points = points;
+
     // Set slice variables.
     this.arcLength = Math.PI / Math.max(1, this.points);
     var startAngle = 1.5 * Math.PI;
@@ -132,7 +140,7 @@ Kaleidoscope.prototype.drawFrame = function (ts) {
 
     // Draw a border around the kaleidoscope to cover pixel artifacts.
     this.ctx.beginPath();
-    this.ctx.strokeStyle = '#fff';
+    this.ctx.strokeStyle = '#000';
     this.ctx.lineWidth = 2;
     this.ctx.arc(0, 0, this.radius, 0, 2 * Math.PI);
     this.ctx.stroke();

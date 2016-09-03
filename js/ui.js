@@ -5,6 +5,7 @@ const ControlForm = React.createClass({
         return {
             canvasWidth: root.offsetWidth,
             canvasHeight: root.offsetHeight,
+            fullscreen: this.props.fullscreen === 'true',
             image: this.props.initialImage,
             points: this.props.initialPoints,
             rotateTime: this.props.initialTime
@@ -18,6 +19,14 @@ const ControlForm = React.createClass({
         });
 
         this.kaleidoscope.setupCanvas();
+    },
+
+    updateFullscreen(event) {
+        this.setState({
+            fullscreen: event.target.checked
+        });
+
+        this.kaleidoscope.setupCanvas(event.target.checked);
     },
 
     updateImage(event) {
@@ -48,24 +57,45 @@ const ControlForm = React.createClass({
         return (
             <div>
                 <canvas id='canvas' width={this.state.canvasWidth} height={this.state.canvasHeight} />
-                <form>
-                    <div>
-                        <input id='rainbow' type='checkbox' value='./rainbow.png' checked={this.state.image === './rainbow.png'} onChange={this.updateImage} />
-                        <label htmlFor='rainbow'>Rainbow</label>
+                <form className='form-horizontal'>
+                    <div className='form-group'>
+                        <label className='col-sm-2 control-label'>Fullscreen</label>
+                        <div className='col-sm-10'>
+                            <p className='form-control-static'>
+                                <input id='fullscreen' type='checkbox' checked={this.state.fullscreen} onChange={this.updateFullscreen} />
+                            </p>
+                        </div>
                     </div>
-                    <div>
-                        <input id='spiral' type='checkbox' value='./spiral.png' checked={this.state.image === './spiral.png'} onChange={this.updateImage} />
-                        <label htmlFor='spiral'>Spiral</label>
+                    <div className='form-group'>
+                        <label className='col-sm-2 control-label'>Image</label>
+                        <div className='col-sm-10'>
+                            <label className='checkbox-inline'>
+                                <input id='rainbow' type='checkbox' value='./rainbow.png' checked={this.state.image === './rainbow.png'} onChange={this.updateImage} />
+                                Rainbow
+                            </label>
+                            <label className='checkbox-inline'>
+                                <input id='spiral' type='checkbox' value='./spiral.png' checked={this.state.image === './spiral.png'} onChange={this.updateImage} />
+                                Spiral
+                            </label>
+                        </div>
                     </div>
-                    <div>
-                        <label htmlFor='points'>Points</label>
-                        <input id='points' type='range' min='0' max='20' value={this.state.points} onChange={this.updatePoints} />
-                        <span>{this.state.points}</span>
+                    <div className='form-group'>
+                        <label className='col-sm-2 control-label' htmlFor='points'>Points</label>
+                        <div className='col-sm-8'>
+                            <input className='form-control' id='points' type='range' min='0' max='20' value={this.state.points} onChange={this.updatePoints} />
+                        </div>
+                        <div className='col-sm-2'>
+                            <p className='form-control-static'>{this.state.points}</p>
+                        </div>
                     </div>
-                    <div>
-                        <label htmlFor='rotateTime'>Rotate time</label>
-                        <input id='rotateTime' type='range' min='100' max='5000' value={this.state.rotateTime} onChange={this.updateTime} />
-                        <span>{this.state.rotateTime}</span>
+                    <div className='form-group'>
+                        <label className='col-sm-2 control-label' htmlFor='rotateTime'>Rotate time</label>
+                        <div className='col-sm-8'>
+                            <input className='form-control' id='rotateTime' type='range' min='100' max='5000' value={this.state.rotateTime} onChange={this.updateTime} />
+                        </div>
+                        <div className='col-sm-2'>
+                            <p className='form-control-static'>{this.state.rotateTime}</p>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -74,7 +104,7 @@ const ControlForm = React.createClass({
 
     componentDidMount() {
         // Initialize kaleidoscope object on the newly created canvas.
-        this.kaleidoscope = new Kaleidoscope('canvas', this.state.image, this.state.points, this.state.rotateTime);
+        this.kaleidoscope = new Kaleidoscope('canvas', this.state.image, this.state.fullscreen, this.state.points, this.state.rotateTime);
 
         // Set up the window resize event to update the canvas.
         window.onresize = this.updateSize;
@@ -82,4 +112,4 @@ const ControlForm = React.createClass({
 });
 
 ReactDOM.render(
-    <ControlForm canvasSize='600' initialImage='./rainbow.png' initialPoints='3' initialTime='3000' />, root);
+    <ControlForm fullscreen='true' initialImage='./rainbow.png' initialPoints='3' initialTime='3000' />, root);

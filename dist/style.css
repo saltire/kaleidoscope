@@ -1,6 +1,7 @@
 html, body {
     height: 100%;
     margin: 0;
+    background: #000;
     overflow: hidden;
 }
 
@@ -19,14 +20,13 @@ form {
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 100px;
     padding: 20px;
     background: rgba(255, 255, 255, .5);
     color: #fff;
-    font-family: sans-serif;
 }
 
-form div {
-    max-width: 600px;
-    margin: auto;
+.form-control,
+.form-control:focus {
+    box-shadow: none;
+    -webkit-box-shadow: none;
 }
