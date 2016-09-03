@@ -1,10 +1,23 @@
+const root = document.getElementById('kaleidoscope');
+
 const ControlForm = React.createClass({
     getInitialState() {
         return {
+            canvasWidth: root.offsetWidth,
+            canvasHeight: root.offsetHeight,
             image: this.props.initialImage,
             points: this.props.initialPoints,
             rotateTime: this.props.initialTime
         };
+    },
+
+    updateSize(event) {
+        this.setState({
+            canvasWidth: root.offsetWidth,
+            canvasHeight: root.offsetHeight
+        });
+
+        this.kaleidoscope.setupCanvas();
     },
 
     updateImage(event) {
@@ -34,7 +47,7 @@ const ControlForm = React.createClass({
     render() {
         return (
             <div>
-                <canvas id='canvas' width={this.props.canvasSize} height={this.props.canvasSize} />
+                <canvas id='canvas' width={this.state.canvasWidth} height={this.state.canvasHeight} />
                 <form>
                     <div>
                         <input id='rainbow' type='checkbox' value='./rainbow.png' checked={this.state.image === './rainbow.png'} onChange={this.updateImage} />
@@ -60,9 +73,13 @@ const ControlForm = React.createClass({
     },
 
     componentDidMount() {
+        // Initialize kaleidoscope object on the newly created canvas.
         this.kaleidoscope = new Kaleidoscope('canvas', this.state.image, this.state.points, this.state.rotateTime);
+
+        // Set up the window resize event to update the canvas.
+        window.onresize = this.updateSize;
     }
 });
 
-ReactDOM.render(<ControlForm canvasSize='600' initialImage='./rainbow.png' initialPoints='3' initialTime='3000' />,
-    document.getElementById('kaleidoscope'));
+ReactDOM.render(
+    <ControlForm canvasSize='600' initialImage='./rainbow.png' initialPoints='3' initialTime='3000' />, root);
