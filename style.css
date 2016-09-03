@@ -1,4 +1,32 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+#kaleidoscope {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
 canvas {
     display: block;
+    margin: auto;
+}
+
+form {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100px;
+    padding: 20px;
+    background: rgba(255, 255, 255, .5);
+    color: #fff;
+    font-family: sans-serif;
+}
+
+form div {
+    max-width: 600px;
     margin: auto;
 }
