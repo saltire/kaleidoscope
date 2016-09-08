@@ -1,4 +1,4 @@
-const Kaleidoscope = function (canvasId, imagePath, fullscreen, points, rotateTime) {
+const Kaleidoscope = function (canvasId, imagePath, width, height, fullscreen, points, rotateTime) {
     // Set up main canvas.
     this.canvas = document.getElementById(canvasId);
     this.ctx = this.canvas.getContext('2d');
@@ -9,6 +9,8 @@ const Kaleidoscope = function (canvasId, imagePath, fullscreen, points, rotateTi
 
     // Initialize variables.
     this.imagePath = imagePath;
+    this.canvas.width = width;
+    this.canvas.height = height;
     this.fullscreen = fullscreen;
     this.points = points;
     this.rotateTime = rotateTime;
@@ -20,11 +22,18 @@ const Kaleidoscope = function (canvasId, imagePath, fullscreen, points, rotateTi
     this.setupCanvas();
 };
 
-Kaleidoscope.prototype.setupCanvas = function (fullscreen) {
-    if (fullscreen !== undefined) {
-        this.fullscreen = fullscreen;
-    }
+Kaleidoscope.prototype.setDimensions = function (width, height) {
+    this.canvas.width = width;
+    this.canvas.height = height;
+    this.setupCanvas();
+};
 
+Kaleidoscope.prototype.setFullscreen = function (fullscreen) {
+    this.fullscreen = fullscreen;
+    this.setupCanvas();
+}
+
+Kaleidoscope.prototype.setupCanvas = function () {
     this.centerX = this.canvas.width / 2;
     this.centerY = this.canvas.height / 2;
     this.ctx.setTransform(1, 0, 0, 1, this.centerX, this.centerY);
