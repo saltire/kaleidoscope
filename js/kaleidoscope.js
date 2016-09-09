@@ -1,25 +1,27 @@
-const Kaleidoscope = function (canvasId, imagePath, width, height, fullscreen, points, rotateTime) {
-    // Set up main canvas.
+const Kaleidoscope = function (canvasId, width, height, fullscreen, points, imagePath, rotateTime) {
+    // Create main canvas.
     this.canvas = document.getElementById(canvasId);
     this.ctx = this.canvas.getContext('2d');
 
-    // Set up image canvas.
+    // Create image canvas.
     this.imageCanvas = document.createElement('canvas');
     this.imageCtx = this.imageCanvas.getContext('2d');
 
     // Initialize variables.
-    this.imagePath = imagePath;
     this.canvas.width = width;
     this.canvas.height = height;
     this.fullscreen = fullscreen;
     this.points = points;
+    this.imagePath = imagePath;
     this.rotateTime = rotateTime;
     this.lastTs = 0;
     this.rotatePercent = 0;
-    this.animStarted = false;
 
-    // Set up variables according to canvas size.
-    this.setupCanvas();
+    // Set up main canvas.
+    this.setupCanvas(() => {
+        // Request the first animation frame.
+        window.requestAnimationFrame(this.drawFrame.bind(this));
+    });
 };
 
 Kaleidoscope.prototype.setDimensions = function (width, height) {
@@ -31,9 +33,9 @@ Kaleidoscope.prototype.setDimensions = function (width, height) {
 Kaleidoscope.prototype.setFullscreen = function (fullscreen) {
     this.fullscreen = fullscreen;
     this.setupCanvas();
-}
+};
 
-Kaleidoscope.prototype.setupCanvas = function () {
+Kaleidoscope.prototype.setupCanvas = function (callback) {
     this.centerX = this.canvas.width / 2;
     this.centerY = this.canvas.height / 2;
     this.ctx.setTransform(1, 0, 0, 1, this.centerX, this.centerY);
@@ -50,13 +52,7 @@ Kaleidoscope.prototype.setupCanvas = function () {
     this.setPoints(this.points);
 
     // Draw image on image canvas.
-    this.setImage(this.imagePath, () => {
-        if (!this.animStarted) {
-            this.animStarted = true;
-            // Request the first animation frame.
-            window.requestAnimationFrame(this.drawFrame.bind(this));
-        }
-    });
+    this.setImage(this.imagePath, callback);
 };
 
 Kaleidoscope.prototype.setImage = function (imagePath, callback) {

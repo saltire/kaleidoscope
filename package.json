@@ -6,6 +6,7 @@
     "type": "git",
     "url": "git+https://github.com/saltire/kaleidoscope.git"
   },
+  "author": "x@saltiresable.com",
   "license": "ISC",
   "homepage": "https://github.com/saltire/kaleidoscope#readme",
   "devDependencies": {

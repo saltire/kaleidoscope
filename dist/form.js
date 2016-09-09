@@ -151,7 +151,7 @@ var ControlForm = React.createClass({
     },
     componentDidMount: function componentDidMount() {
         // Initialize kaleidoscope object on the newly created canvas.
-        this.kaleidoscope = new Kaleidoscope('kaleidoscope', this.state.image, root.offsetWidth, root.offsetHeight, this.state.fullscreen, this.state.points, this.state.rotateTime);
+        this.kaleidoscope = new Kaleidoscope('kaleidoscope', root.offsetWidth, root.offsetHeight, this.state.fullscreen, this.state.points, this.state.image, this.state.rotateTime);
 
         // Set up the window resize event to update the canvas.
         window.onresize = this.updateSize;
