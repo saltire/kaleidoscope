@@ -60,16 +60,17 @@ var ControlForm = React.createClass({
             ),
             React.createElement(
                 'form',
-                { className: 'form-horizontal container' },
+                null,
                 React.createElement(
                     'div',
-                    { className: 'form-group' },
+                    null,
+                    React.createElement('header', null),
                     React.createElement(
                         'div',
-                        { className: 'col-sm-offset-2 col-sm-10' },
+                        null,
                         React.createElement(
                             'label',
-                            { className: 'checkbox-inline' },
+                            null,
                             React.createElement('input', { id: 'fullscreen', type: 'checkbox', checked: this.state.fullscreen, onChange: this.updateFullscreen }),
                             'Fullscreen'
                         )
@@ -77,24 +78,24 @@ var ControlForm = React.createClass({
                 ),
                 React.createElement(
                     'div',
-                    { className: 'form-group' },
+                    null,
                     React.createElement(
-                        'label',
-                        { className: 'col-sm-2 control-label' },
+                        'header',
+                        null,
                         'Image'
                     ),
                     React.createElement(
                         'div',
-                        { className: 'col-sm-10' },
+                        null,
                         React.createElement(
                             'label',
-                            { className: 'checkbox-inline' },
+                            null,
                             React.createElement('input', { id: 'rainbow', type: 'checkbox', value: './rainbow.png', checked: this.state.image === './rainbow.png', onChange: this.updateImage }),
                             'Rainbow'
                         ),
                         React.createElement(
                             'label',
-                            { className: 'checkbox-inline' },
+                            null,
                             React.createElement('input', { id: 'spiral', type: 'checkbox', value: './spiral.png', checked: this.state.image === './spiral.png', onChange: this.updateImage }),
                             'Spiral'
                         )
@@ -102,48 +103,40 @@ var ControlForm = React.createClass({
                 ),
                 React.createElement(
                     'div',
-                    { className: 'form-group' },
+                    null,
                     React.createElement(
-                        'label',
-                        { className: 'col-sm-2 control-label', htmlFor: 'points' },
+                        'header',
+                        null,
                         'Points'
                     ),
                     React.createElement(
                         'div',
-                        { className: 'col-sm-8' },
-                        React.createElement('input', { className: 'form-control', id: 'points', type: 'range', min: '0', max: '20', value: this.state.points, onChange: this.updatePoints })
+                        null,
+                        React.createElement('input', { id: 'points', type: 'range', min: '0', max: '20', value: this.state.points, onChange: this.updatePoints })
                     ),
                     React.createElement(
-                        'div',
-                        { className: 'col-sm-2' },
-                        React.createElement(
-                            'p',
-                            { className: 'form-control-static' },
-                            this.state.points
-                        )
+                        'span',
+                        null,
+                        this.state.points
                     )
                 ),
                 React.createElement(
                     'div',
-                    { className: 'form-group' },
+                    null,
                     React.createElement(
-                        'label',
-                        { className: 'col-sm-2 control-label', htmlFor: 'rotateTime' },
+                        'header',
+                        null,
                         'Rotate time'
                     ),
                     React.createElement(
                         'div',
-                        { className: 'col-sm-8' },
-                        React.createElement('input', { className: 'form-control', id: 'rotateTime', type: 'range', min: '100', max: '5000', value: this.state.rotateTime, onChange: this.updateTime })
+                        null,
+                        React.createElement('input', { id: 'rotateTime', type: 'range', min: '100', max: '5000', value: this.state.rotateTime, onChange: this.updateTime })
                     ),
                     React.createElement(
-                        'div',
-                        { className: 'col-sm-2' },
-                        React.createElement(
-                            'p',
-                            { className: 'form-control-static' },
-                            this.state.rotateTime
-                        )
+                        'span',
+                        null,
+                        this.state.rotateTime
                     )
                 )
             )
