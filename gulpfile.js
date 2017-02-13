@@ -15,7 +15,6 @@ gulp.task('babel', () => {
 gulp.task('libs', () => {
     gulp.src(
         [
-            'node_modules/bootstrap/dist/css/bootstrap.min.css',
             'node_modules/react/dist/react.js',
             'node_modules/react-dom/dist/react-dom.js'
         ])
