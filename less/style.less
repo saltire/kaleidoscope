@@ -1,0 +1,113 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  background: #000;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  overflow: hidden;
+}
+
+#root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+canvas {
+  display: block;
+  margin: auto;
+}
+
+.form-container {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, .5);
+  color: #fff;
+  transform: translateY(0);
+  transition: transform .5s ease-in-out;
+
+  &.formHidden {
+    transform: translateY(100%);
+  }
+
+  .show-hide {
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    padding: 3px 30px;
+    border-top-left-radius: 5px;
+    background: inherit;
+    font-size: 20px;
+    cursor: pointer;
+  }
+}
+
+form {
+  max-width: 1140px;
+  margin: auto;
+  padding: 20px;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+    line-height: 30px;
+
+    > header {
+      width: 125px;
+      font-weight: bold;
+    }
+
+    > div {
+      label {
+        margin-right: 1em;
+      }
+
+      input {
+        vertical-align: middle;
+
+        &[type=range] {
+          width: 100%;
+        }
+
+        &[type=checkbox] {
+          margin-right: .75em;
+        }
+      }
+    }
+
+    > span {
+      width: 125px;
+    }
+  }
+
+  @media only screen and (min-width: 770px) {
+    max-width: 750px;
+
+    > div {
+      flex-direction: row;
+
+      > header {
+        text-align: right;
+      }
+
+      > div {
+        margin: 0 30px;
+        flex-grow: 1;
+      }
+    }
+  }
+
+  @media only screen and (min-width: 985px) {
+    max-width: 960px;
+  }
+
+  @media only screen and (min-width: 1200px) {
+    max-width: 1170px;
+  }
+}
