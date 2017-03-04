@@ -10,7 +10,7 @@ var ControlForm = React.createClass({
             fullscreen: this.props.fullscreen === 'true',
             image: this.props.initialImage,
             points: this.props.initialPoints,
-            rotateTime: this.props.initialTime
+            rotateSpeed: this.props.initialSpeed
         };
     },
     toggleForm: function toggleForm() {
@@ -42,12 +42,12 @@ var ControlForm = React.createClass({
 
         this.kaleidoscope.setPoints(event.target.value);
     },
-    updateTime: function updateTime(event) {
+    updateSpeed: function updateSpeed(event) {
         this.setState({
-            rotateTime: event.target.value
+            rotateSpeed: event.target.value
         });
 
-        this.kaleidoscope.rotateTime = event.target.value;
+        this.kaleidoscope.rotateSpeed = event.target.value;
     },
     render: function render() {
         return React.createElement(
@@ -126,17 +126,17 @@ var ControlForm = React.createClass({
                     React.createElement(
                         'header',
                         null,
-                        'Rotate time'
+                        'Rotate speed'
                     ),
                     React.createElement(
                         'div',
                         null,
-                        React.createElement('input', { id: 'rotateTime', type: 'range', min: '100', max: '5000', value: this.state.rotateTime, onChange: this.updateTime })
+                        React.createElement('input', { id: 'rotateSpeed', type: 'range', min: '-1000', max: '1000', value: this.state.rotateSpeed, onChange: this.updateSpeed })
                     ),
                     React.createElement(
                         'span',
                         null,
-                        this.state.rotateTime
+                        this.state.rotateSpeed
                     )
                 )
             )
@@ -144,11 +144,11 @@ var ControlForm = React.createClass({
     },
     componentDidMount: function componentDidMount() {
         // Initialize kaleidoscope object on the newly created canvas.
-        this.kaleidoscope = new Kaleidoscope('kaleidoscope', root.offsetWidth, root.offsetHeight, this.state.fullscreen, this.state.points, this.state.image, this.state.rotateTime);
+        this.kaleidoscope = new Kaleidoscope('kaleidoscope', root.offsetWidth, root.offsetHeight, this.state.fullscreen, this.state.points, this.state.image, this.state.rotateSpeed);
 
         // Set up the window resize event to update the canvas.
         window.onresize = this.updateSize;
     }
 });
 
-ReactDOM.render(React.createElement(ControlForm, { fullscreen: 'true', initialImage: './rainbow.png', initialPoints: '3', initialTime: '3000' }), document.getElementById('control-form'));
+ReactDOM.render(React.createElement(ControlForm, { fullscreen: 'false', initialImage: './rainbow.png', initialPoints: '3', initialSpeed: '100' }), document.getElementById('control-form'));

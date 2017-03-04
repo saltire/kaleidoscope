@@ -1,4 +1,4 @@
-const Kaleidoscope = function (canvasId, width, height, fullscreen, points, imagePath, rotateTime) {
+const Kaleidoscope = function (canvasId, width, height, fullscreen, points, imagePath, rotateSpeed) {
     // Create main canvas.
     this.canvas = document.getElementById(canvasId);
     this.ctx = this.canvas.getContext('2d');
@@ -13,7 +13,7 @@ const Kaleidoscope = function (canvasId, width, height, fullscreen, points, imag
     this.fullscreen = fullscreen;
     this.points = points;
     this.imagePath = imagePath;
-    this.rotateTime = rotateTime;
+    this.rotateSpeed = rotateSpeed;
     this.lastTs = 0;
     this.rotatePercent = 0;
 
@@ -118,7 +118,7 @@ Kaleidoscope.prototype.drawFrame = function (ts) {
     // Get the current image rotation.
     const delta = ts - this.lastTs;
     this.lastTs = ts;
-    this.rotatePercent += delta / this.rotateTime;
+    this.rotatePercent += delta / 400000 * this.rotateSpeed;
 
     // Rotate the image and draw it onto the slice canvases.
     this.sliceCtx.rotate(this.rotatePercent * 2 * Math.PI);

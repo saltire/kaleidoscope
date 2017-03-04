@@ -7,7 +7,7 @@ const ControlForm = React.createClass({
             fullscreen: this.props.fullscreen === 'true',
             image: this.props.initialImage,
             points: this.props.initialPoints,
-            rotateTime: this.props.initialTime
+            rotateSpeed: this.props.initialSpeed
         };
     },
 
@@ -45,12 +45,12 @@ const ControlForm = React.createClass({
         this.kaleidoscope.setPoints(event.target.value);
     },
 
-    updateTime(event) {
+    updateSpeed(event) {
         this.setState({
-            rotateTime: event.target.value
+            rotateSpeed: event.target.value
         });
 
-        this.kaleidoscope.rotateTime = event.target.value;
+        this.kaleidoscope.rotateSpeed = event.target.value;
     },
 
     render() {
@@ -90,11 +90,11 @@ const ControlForm = React.createClass({
                         <span>{this.state.points}</span>
                     </div>
                     <div>
-                        <header>Rotate time</header>
+                        <header>Rotate speed</header>
                         <div>
-                            <input id='rotateTime' type='range' min='100' max='5000' value={this.state.rotateTime} onChange={this.updateTime} />
+                            <input id='rotateSpeed' type='range' min='-1000' max='1000' value={this.state.rotateSpeed} onChange={this.updateSpeed} />
                         </div>
-                        <span>{this.state.rotateTime}</span>
+                        <span>{this.state.rotateSpeed}</span>
                     </div>
                 </form>
             </div>
@@ -103,7 +103,7 @@ const ControlForm = React.createClass({
 
     componentDidMount() {
         // Initialize kaleidoscope object on the newly created canvas.
-        this.kaleidoscope = new Kaleidoscope('kaleidoscope', root.offsetWidth, root.offsetHeight, this.state.fullscreen, this.state.points, this.state.image, this.state.rotateTime);
+        this.kaleidoscope = new Kaleidoscope('kaleidoscope', root.offsetWidth, root.offsetHeight, this.state.fullscreen, this.state.points, this.state.image, this.state.rotateSpeed);
 
         // Set up the window resize event to update the canvas.
         window.onresize = this.updateSize;
@@ -111,4 +111,4 @@ const ControlForm = React.createClass({
 });
 
 ReactDOM.render(
-    <ControlForm fullscreen='true' initialImage='./rainbow.png' initialPoints='3' initialTime='3000' />, document.getElementById('control-form'));
+    <ControlForm fullscreen='false' initialImage='./rainbow.png' initialPoints='3' initialSpeed='100' />, document.getElementById('control-form'));
