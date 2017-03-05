@@ -6,6 +6,8 @@ const gulp = require('gulp');
 const connect = require('gulp-connect');
 const less = require('gulp-less');
 const run = require('gulp-run');
+const streamify = require('gulp-streamify');
+const uglify = require('gulp-uglify');
 const source = require('vinyl-source-stream');
 const vueify = require('vueify');
 
@@ -17,6 +19,7 @@ gulp.task('browserify', () => {
         .bundle()
         .on('error', (err) => console.log('Error parsing with Browserify:', err.message))
         .pipe(source('form.js'))
+        .pipe(streamify(uglify()))
         .pipe(gulp.dest('dist'));
 });
 
