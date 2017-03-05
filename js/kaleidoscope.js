@@ -1,4 +1,4 @@
-class Kaleidoscope {
+export default class Kaleidoscope {
     constructor(canvasId, width, height, fullscreen, points, imagePath, rotateSpeed) {
         // Create main canvas.
         this.canvas = document.getElementById(canvasId);
