@@ -28,7 +28,7 @@ canvas {
   transform: translateY(0);
   transition: transform 0.5s ease-in-out;
 }
-.form-container.formHidden {
+.form-container.form-hidden {
   transform: translateY(100%);
 }
 .form-container .show-hide {
